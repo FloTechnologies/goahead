@@ -529,7 +529,7 @@
     /**
         Unsigned short data type.
      */
-    typedef unsigned short ushort;
+    // typedef unsigned short ushort;
 #endif
 
 #ifndef HAS_CUSHORT
@@ -601,7 +601,7 @@
     /**
         Unsigned integer (machine dependent bit size) data type.
      */
-    typedef unsigned int uint;
+    // typedef unsigned int uint;
 #endif
 
 #ifndef HAS_ULONG
@@ -609,7 +609,7 @@
     /**
         Unsigned long (machine dependent bit size) data type.
      */
-    typedef unsigned long ulong;
+    // typedef unsigned long ulong;
 #endif
 
 #ifndef HAS_CINT
