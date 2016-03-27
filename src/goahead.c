@@ -27,6 +27,8 @@ static int finished = 0;
 static void initPlatform();
 static void logHeader();
 static void usage();
+static void sd_upgrade_action(Webs *wp);
+static void sys_upgrade_action(Webs *wp);
 
 #if WINDOWS
 static void windowsClose();
@@ -141,6 +143,10 @@ MAIN(goahead, int argc, char **argv, char **envp)
      */
     websAddRoute("/", "file", 0);
 #endif
+
+    websDefineAction("sd_upgrade", sd_upgrade_action);
+    websDefineAction("sys_upgrade", sys_upgrade_action);
+
 #if ME_UNIX_LIKE && !MACOSX
     /*
         Service events till terminated
@@ -333,6 +339,118 @@ static LRESULT CALLBACK websAboutProc(HWND hwndDlg, uint msg, uint wp, long lp)
 }
 
 #endif
+
+static void sys_upgrade_action(Webs *wp)
+{
+    if (!wp->currentFile) {
+        websResponse(wp, 200, "NO UPGRADE IMAGE");
+        return;
+    }
+
+    char *clientFilename = wp->currentFile->clientFilename;
+    char *filename = wp->currentFile->filename;
+
+    if (clientFilename == NULL || filename == NULL) {
+        websResponse(wp, 200, "NO UPGRADE IMAGE");
+        return;
+    }
+
+    int isValidFileType = 0;
+    char img[] = ".img";
+
+    if (strlen(clientFilename) >= sizeof(img) &&
+            !strcmp(clientFilename + strlen(clientFilename) - strlen(img), img)) {
+        isValidFileType = 1;
+    }
+
+    if (!isValidFileType) {
+        websResponse(wp, 200, "FILE TYPE IS INVALID");
+        return;
+    }
+
+    char cmdbuf[256];
+
+    /* When websDone, the uploaded file will be removed */
+    /* So rename it. */
+    bzero(cmdbuf, sizeof(cmdbuf));
+    sprintf(cmdbuf, "mv \"%s\" \"%s.img\"", filename, filename);
+    system(cmdbuf);
+
+    bzero(cmdbuf, sizeof(cmdbuf));
+    sprintf(cmdbuf, "/SD/bin/sys-upgrade \"%s.img\" &", filename);
+    system(cmdbuf);
+
+    websResponse(wp, 200,
+            "<html>"
+            "<head>"
+            "<meta http-equiv=\"refresh\" content=\"180;url=/\" />"
+            "</head>"
+            "<body>"
+            "<h1>IMAGE UPLOADED, UPGRADING SYSTEM...</h1>"
+            "<h1>WILL AUTO REFRESH IN 3 MINUTES</h1>"
+            "</body>"
+            "</html>"
+            );
+}
+
+static void sd_upgrade_action(Webs *wp)
+{
+    if (!wp->currentFile) {
+        websResponse(wp, 200, "NO UPGRADE PACKAGE");
+        return;
+    }
+
+    char *clientFilename = wp->currentFile->clientFilename;
+    char *filename = wp->currentFile->filename;
+
+    if (clientFilename == NULL || filename == NULL) {
+        websResponse(wp, 200, "NO UPGRADE PACKAGE");
+        return;
+    }
+
+    int isValidFileType = 0;
+    char tgz[] = ".tgz";
+    char targz[] = ".tar.gz";
+
+    if (strlen(clientFilename) >= sizeof(tgz) &&
+            !strcmp(clientFilename + strlen(clientFilename) - strlen(tgz), tgz)) {
+        isValidFileType = 1;
+    }
+
+    if (strlen(clientFilename) >= sizeof(targz) &&
+            !strcmp(clientFilename + strlen(clientFilename) - strlen(targz), targz)) {
+        isValidFileType = 1;
+    }
+
+    if (!isValidFileType) {
+        websResponse(wp, 200, "FILE TYPE IS INVALID");
+        return;
+    }
+
+    char cmdbuf[256];
+
+    /* When websDone, the uploaded file will be removed */
+    /* So rename it. */
+    bzero(cmdbuf, sizeof(cmdbuf));
+    sprintf(cmdbuf, "mv \"%s\" \"%s.tar.gz\"", filename, filename);
+    system(cmdbuf);
+
+    bzero(cmdbuf, sizeof(cmdbuf));
+    sprintf(cmdbuf, "/SD/bin/sd-upgrade \"%s.tar.gz\" &", filename);
+    system(cmdbuf);
+
+    websResponse(wp, 200,
+            "<html>"
+            "<head>"
+            "<meta http-equiv=\"refresh\" content=\"300;url=/\" />"
+            "</head>"
+            "<body>"
+            "<h1>PACKAGE UPLOADED, UPGRADING SD CARD...</h1>"
+            "<h1>WILL AUTO REFRESH IN 5 MINUTES</h1>"
+            "</body>"
+            "</html>"
+            );
+}
 
 /*
     @copy   default
