@@ -3,11 +3,13 @@
 set -e
 
 ROOT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+OUT_DIR="${ROOT_DIR}/out/ultima-http-server"
 TOOLCHAIN="${ROOT_DIR}/../mipsel-toolchain"
 ROOTFS="${ROOT_DIR}/../rootfs"
-OUT_DIR="${ROOTFS}/usr"
 
 export PATH="${TOOLCHAIN}/bin:${PATH}"
+
+rm -rf build
 
 make \
   SHOW=1 \
@@ -15,7 +17,7 @@ make \
   OS=linux \
   CC=mipsel-linux-gcc \
   IFLAGS=" -I${ROOTFS}/include -I${ROOTFS}/usr/include -I${ROOT_DIR}/build/linux-mips-static/inc " \
-  LIBPATHS=" -L${ROOTFS}/lib -L${ROOTFS}/usr/lib -L${ROOT_DIR}/build/linux-mips-static/bin" \
+  LIBPATHS=" -L${ROOTFS}/lib -L${ROOTFS}/usr/lib -L${ROOT_DIR}/build/linux-mips-static/bin " \
   PROFILE=static \
   ME_COM_SSL=0 \
   ME_COM_MBEDTLS=0 \
@@ -26,3 +28,9 @@ make \
   ME_GOAHEAD_SSL=0 \
   ME_GOAHEAD_STATIC=1 \
   ME_GOAHEAD_UPLOAD=1
+
+rm -rf "${OUT_DIR}"
+mkdir -p "${OUT_DIR}"
+cp "${ROOT_DIR}/build/linux-mips-static/bin/goahead" \
+  "${ROOT_DIR}/src/"*".txt" \
+  "${OUT_DIR}"
