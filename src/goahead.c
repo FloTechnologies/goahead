@@ -343,7 +343,7 @@ static LRESULT CALLBACK websAboutProc(HWND hwndDlg, uint msg, uint wp, long lp)
 static void sys_upgrade_action(Webs *wp)
 {
     if (!wp->currentFile) {
-        websResponse(wp, 200, "NO UPGRADE IMAGE");
+        websResponse(wp, 200, "<h1>NO UPGRADE IMAGE</h1>");
         return;
     }
 
@@ -351,7 +351,7 @@ static void sys_upgrade_action(Webs *wp)
     char *filename = wp->currentFile->filename;
 
     if (clientFilename == NULL || filename == NULL) {
-        websResponse(wp, 200, "NO UPGRADE IMAGE");
+        websResponse(wp, 200, "<h1>NO UPGRADE IMAGE</h1>");
         return;
     }
 
@@ -364,7 +364,7 @@ static void sys_upgrade_action(Webs *wp)
     }
 
     if (!isValidFileType) {
-        websResponse(wp, 200, "FILE TYPE IS INVALID");
+        websResponse(wp, 200, "<h1>FILE TYPE IS INVALID</h1>");
         return;
     }
 
@@ -396,7 +396,7 @@ static void sys_upgrade_action(Webs *wp)
 static void sd_upgrade_action(Webs *wp)
 {
     if (!wp->currentFile) {
-        websResponse(wp, 200, "NO UPGRADE PACKAGE");
+        websResponse(wp, 200, "<h1>NO UPGRADE PACKAGE</h1>");
         return;
     }
 
@@ -404,7 +404,7 @@ static void sd_upgrade_action(Webs *wp)
     char *filename = wp->currentFile->filename;
 
     if (clientFilename == NULL || filename == NULL) {
-        websResponse(wp, 200, "NO UPGRADE PACKAGE");
+        websResponse(wp, 200, "<h1>NO UPGRADE PACKAGE</h1>");
         return;
     }
 
@@ -423,7 +423,7 @@ static void sd_upgrade_action(Webs *wp)
     }
 
     if (!isValidFileType) {
-        websResponse(wp, 200, "FILE TYPE IS INVALID");
+        websResponse(wp, 200, "<h1>FILE TYPE IS INVALID</h1>");
         return;
     }
 
