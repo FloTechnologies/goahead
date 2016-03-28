@@ -376,10 +376,6 @@ static void sys_upgrade_action(Webs *wp)
     sprintf(cmdbuf, "mv \"%s\" \"%s.img\"", filename, filename);
     system(cmdbuf);
 
-    bzero(cmdbuf, sizeof(cmdbuf));
-    sprintf(cmdbuf, "/SD/bin/sys-upgrade \"%s.img\" &", filename);
-    system(cmdbuf);
-
     websResponse(wp, 200,
             "<html>"
             "<head>"
@@ -391,6 +387,10 @@ static void sys_upgrade_action(Webs *wp)
             "</body>"
             "</html>"
             );
+
+    bzero(cmdbuf, sizeof(cmdbuf));
+    sprintf(cmdbuf, "/SD/bin/sys-upgrade \"%s.img\" &", filename);
+    system(cmdbuf);
 }
 
 static void sd_upgrade_action(Webs *wp)
@@ -435,10 +435,6 @@ static void sd_upgrade_action(Webs *wp)
     sprintf(cmdbuf, "mv \"%s\" \"%s.tar.gz\"", filename, filename);
     system(cmdbuf);
 
-    bzero(cmdbuf, sizeof(cmdbuf));
-    sprintf(cmdbuf, "/SD/bin/sd-upgrade \"%s.tar.gz\" &", filename);
-    system(cmdbuf);
-
     websResponse(wp, 200,
             "<html>"
             "<head>"
@@ -450,6 +446,10 @@ static void sd_upgrade_action(Webs *wp)
             "</body>"
             "</html>"
             );
+
+    bzero(cmdbuf, sizeof(cmdbuf));
+    sprintf(cmdbuf, "/SD/bin/sd-upgrade \"%s.tar.gz\" &", filename);
+    system(cmdbuf);
 }
 
 /*
