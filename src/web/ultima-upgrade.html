@@ -1,0 +1,27 @@
+<html>
+  <head></head>
+
+  <body>
+
+    System upgrade
+    <form action="/action/sys_upgrade" enctype="multipart/form-data" method="post">
+      <p>
+      Please choose the image file for upgrading<br />
+      <input type="file" name="datafile" size="256" accept=".img">
+      </p>
+      <div><input type="submit" value="Send"></div>
+    </form>
+
+    ===============================================================<br />
+
+    SD card upgrade
+    <form action="/action/sd_upgrade" enctype="multipart/form-data" method="post">
+      <p>
+      Please choose the package file for upgrading<br />
+      <input type="file" name="datafile" size="256" accept=".tgz">
+      </p>
+      <div><input type="submit" value="Send"></div>
+    </form>
+
+  </body>
+</html>

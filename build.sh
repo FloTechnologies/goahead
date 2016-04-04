@@ -33,4 +33,5 @@ rm -rf "${OUT_DIR}"
 mkdir -p "${OUT_DIR}"
 cp "${ROOT_DIR}/build/linux-mips-static/bin/goahead" \
   "${ROOT_DIR}/src/"*".txt" \
+  "${ROOT_DIR}/src/web/ultima-upgrade.html" \
   "${OUT_DIR}"
